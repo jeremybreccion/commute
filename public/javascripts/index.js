@@ -107,30 +107,32 @@ app.run(function($rootScope, $state, $http, $window){
             $rootScope.token = res.data.token;
             $http.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token;
             $rootScope.current_user = res.data.user;
+            $rootScope.current_user.isLoggedIn = true;
             //$state.transitionTo('home');
         }).catch(function(err){
             $rootScope.current_user = {};
             $rootScope.token = undefined;
+            console.log($rootScope.current_user);
             //$state.transitionTo('login');
 
             //need this so that changes are immediately applied.
             //this is from one page to another
-            if(toState.name != 'login' && toState.name != 'register'){
+            /* if(toState.name != 'login' && toState.name != 'register'){
                 $state.transitionTo('login');
             }
             else{
                 $state.transitionTo(toState.name);
-            }
+            } */
         });
 
-        //need this if user tries to access a page without completely logging in (i.e. type the link)
+        /* //need this if user tries to access a page without completely logging in (i.e. type the link)
         if($rootScope.token == undefined && (toState.name != "login" && toState.name != "register")){
             alert('You must log in first');
             event.preventDefault();
             $state.transitionTo('login');
         }
         //if user tries to access login or register page while already logged in
-        else if($rootScope.token != undefined && (toState.name == "login" || toState.name == "register")){
+        else  */if($rootScope.token != undefined && (toState.name == "login" || toState.name == "register")){
             alert('You are already logged in');
             event.preventDefault();
             $state.transitionTo('home');
