@@ -41,6 +41,12 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
         url: '/admin',
         templateUrl: 'main/admin.html',
         //controller: 'AdminController'
+    })
+    .state('post', {
+        parent: 'main',
+        url: '/post/:_id',
+        templateUrl: 'main/post.html',
+        controller: 'PostController'
     });
 
     //catch response errors from server resulted from no authorization token found? or token expired

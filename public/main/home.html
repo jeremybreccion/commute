@@ -1,5 +1,65 @@
-<h1 style="text-align: center">{{welcome_message}}</h1>
-
-<h2>Retrieved from server json</h2>
-<h3>Current Language: {{current_user.current_language}}</h3>
-<h4>Sample String: {{languages.sample_string}}</h4>
+<h2><i>Welcome to Commuters' Guide</i></h2>
+<div class="row">
+    <div class="col-md-9">
+        <p>Need to go somewhere? Search guides here</p>
+        <form class="form-inline" ng-submit="search()">
+            <label>From:</label>
+            <input class="form-control" type="text" ng-model="search.from">
+            <label>To:</label>
+            <input class="form-control" type="text" ng-model="search.to">
+            <button class="btn btn-primary form-control" type="submit">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </form>
+        <hr>
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <td><a ui-sref="post({_id: '291038213'})">Teresa Park to AWS Makati</a></td>
+                    <td>6:10 to 7:40</td>
+                    <td>
+                        <i class="fas fa-child"></i>
+                        <i class="fas fa-angle-right"></i>
+                        <i class="fas fa-bicycle"></i>
+                        <i class="fas fa-angle-right"></i>
+                        <i class="fas fa-child"></i>
+                        <i class="fas fa-angle-right"></i>
+                        <i class="fas fa-car"></i>
+                        <i class="fas fa-angle-right"></i>
+                        <i class="fas fa-child"></i>
+                    </td>
+                    <td>
+                        <i class="fas fa-thumbs-up"></i> 1k 
+                        &nbsp;
+                        <i class="fas fa-thumbs-down"></i> 3
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-3">
+        <div class="row">
+            Want to post a guide? Click <a>here</a>
+        </div>
+        <hr>
+        <div class="row" style="display: block; height: 200px;">
+                <i class="fas fa-newspaper fa-lg"></i> 
+                <strong><b>News</b></strong><br><br>
+                <ul>
+                    <li>user001 posted a guide from <a>DLSU to SM Southmall</a></li>
+                </ul>
+        </div>
+        <hr>
+        <div class="row" style="display: block; height: 200px;">
+                <i class="fas fa-map fa-lg"></i>
+                <strong><b>Popular Guides</b></strong><br><br>
+                <ul>
+                    <li>
+                        <a>SM Southmall to SM Mall of Asia</a> &nbsp;
+                        <i class="fas fa-thumbs-up"></i> 2k
+                    </li>
+                </ul>
+        </div>
+        
+    </div>
+</div>

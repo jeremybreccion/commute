@@ -7,3 +7,9 @@ include steps
 each step has mode of transpo, waiting time for that transpo, travel time, fare, then description
 users can upvote/downvote and comment (with upvotes/downvotes also) on a post
 downvoted posts past limit will notify admins & the poster for review
+
+limitations:
+    inputs are case-sensitive
+    no suggested searches
+
+    inaccurate vehicle icons (jeep, tric)
