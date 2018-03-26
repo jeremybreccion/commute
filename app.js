@@ -11,6 +11,8 @@ var config = require('./config/config.json');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var languages = require('./routes/api/languages');
+var posts = require('./routes/api/posts');
+
 
 
 var app = express();
@@ -34,9 +36,9 @@ app.use('/', expressJwt({ secret: config.secret}).unless({path: config.exempted_
 
 app.use('/users', users);
 app.use('/languages', languages);
+app.use('/posts', posts);
 
 
-//app.use('/', expressJwt({secret: config.secret}));
 // error handler
 app.use(function(err, req, res, next) {
   console.log(err);

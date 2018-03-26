@@ -3,7 +3,8 @@
     "database": {
         "name": "mongodb://localhost:27017/commute",
         "collections": {
-            "accounts": "accounts"
+            "accounts": "accounts",
+            "posts": "posts"
         }
     },
     "exempted_routes": [

@@ -42,6 +42,12 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
         templateUrl: 'main/admin.html',
         //controller: 'AdminController'
     })
+    .state('viewPost', {
+        parent: 'main',
+        url: '/viewPost/:_id',
+        templateUrl: 'main/viewPost.html',
+        controller: 'ViewPostController'
+    })
     .state('post', {
         parent: 'main',
         url: '/post/:_id',
@@ -56,7 +62,7 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
             'responseError': function(rejection){
                 var defer = $q.defer();
                 if(rejection.status == 401){
-                    console.log('UMM');
+                    //console.log('UMM');
                     alert('Unauthorized http request');
                     //reset current_user & token so that /#/login redirect in $stateChangeStart will not execute
                     $rootScope.current_user = {};
@@ -78,7 +84,7 @@ app.run(function($rootScope, $state, $http, $window){
 
     //get english & nihongo languages from server and set to rootScope
     $http.get('/languages/getLanguages').then(function(res){
-        console.log('getting languages...');
+        //console.log('getting languages...');
         $rootScope.languages = res.data.languages;
         console.log($rootScope.languages);
     });
@@ -86,7 +92,7 @@ app.run(function($rootScope, $state, $http, $window){
     //run once? OR RUN EVERY STATECHANGE TO DETERMINE IF SERVER RESTARTS?
     //need this here for enabling multiple tabs since each tab will @ first load will run this
     //disadvantage: double codes, double execution ??
-    console.log('getting token...');
+    //console.log('getting token...');
     $http.get('/session').then(function(res){
         //console.log(res);
         $rootScope.token = res.data.token;
@@ -109,7 +115,7 @@ app.run(function($rootScope, $state, $http, $window){
         console.log('getting token...');
         $http.get('/session').then(function(res){
             //console.log(res);
-            console.log(res.data);
+            //console.log(res.data);
             $rootScope.token = res.data.token;
             $http.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token;
             $rootScope.current_user = res.data.user;
@@ -118,7 +124,7 @@ app.run(function($rootScope, $state, $http, $window){
         }).catch(function(err){
             $rootScope.current_user = {};
             $rootScope.token = undefined;
-            console.log($rootScope.current_user);
+            //console.log($rootScope.current_user);
             //$state.transitionTo('login');
 
             //need this so that changes are immediately applied.
@@ -131,20 +137,20 @@ app.run(function($rootScope, $state, $http, $window){
             } */
         });
 
-        /* //need this if user tries to access a page without completely logging in (i.e. type the link)
-        if($rootScope.token == undefined && (toState.name != "login" && toState.name != "register")){
+        //need this if user tries to access a page without completely logging in (i.e. type the link)
+        if($rootScope.token == undefined && (toState.name == "post" || toState.name == "user")){
             alert('You must log in first');
-            event.preventDefault();
-            $state.transitionTo('login');
+            //event.preventDefault();
+            $state.transitionTo('home');
         }
         //if user tries to access login or register page while already logged in
-        else  */if($rootScope.token != undefined && (toState.name == "login" || toState.name == "register")){
+        else if($rootScope.token != undefined && (toState.name == "login" || toState.name == "register")){
             alert('You are already logged in');
-            event.preventDefault();
+            //event.preventDefault();
             $state.transitionTo('home');
         }
         //check if the user has access to the desired page
-        else if(!isPageAccessible($rootScope.current_user.role ,toState.name)){
+        else if(!isPageAccessible($rootScope.current_user.role, toState.name)){
             alert('You are not authorized to access this page');
             event.preventDefault();
             $state.transitionTo('home');

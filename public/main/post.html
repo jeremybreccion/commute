@@ -1,57 +1,66 @@
-<h3>From Teresa Park to AWS Makati, 6:10 to 7:40</h3>
-<hr>
 <div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-5">
-        <div>
-            <big><b>Step 1 - </b></big><i class="fas fa-bicycle fa-lg"></i><br><br>
-            <p>From: <b>Teresa Park</b> To: <b>Pilar Tric Terminal</b></p>
-            <p>Waiting Time:  10 minutes</p>
-            <p>Travel Time: 6 minutes</p>
-            <p>Fare: 18 PHP</p>
-            <i>"based from experience, you can get a tric before you reach teresa park gate"</i>
-            <br><br>
-        </div>
-        <div>
-            <big><b>Step 2 - </b></big><i class="fas fa-bicycle fa-child fa-lg"></i><br><br>
-            <p>From: <b>Pilar Tric Terminal</b> To: <b>SM Southmall</b></p>
-            <p>Waiting Time:  0 seconds</p>
-            <p>Travel Time: 2 minutes</p>
-            <p>Fare: 0 PHP</p>
-            <!-- <i>"goodluck on having a comfy seat"</i> -->
-            <br><br>
-        </div>
-        <div>
-            <big><b>Step 3 - </b></big><i class="fas fa-bicycle fa-car fa-lg"></i><br><br>
-            <p>From: <b>SM Southmall</b> To: <b>Makati Med</b></p>
-            <p>Waiting Time:  20 minutes</p>
-            <p>Travel Time: 30 minutes</p>
-            <p>Fare: 70 PHP</p>
-            <i>"goodluck having a comfy seat on the UV"</i>
-            <br><br>
-        </div>
-        <div>
-            <big><b>Step 4 - </b></big><i class="fas fa-bicycle fa-child fa-lg"></i><br><br>
-            <p>From: <b>Makati Med</b> To: <b>AWS Makati</b></p>
-            <p>Waiting Time:  0 seconds</p>
-            <p>Travel Time: 10 minutes</p>
-            <p>Fare: 0 PHP</p>
-            <!-- <i>"goodluck on having a comfy seat"</i> -->
-            <br><br>
-        </div>
+    <div class="col-md-3">
+        <i ng-bind="message"></i>
         <hr>
-        <button class="btn btn-default active"><i class="fas fa-thumbs-up fa-lg"></i> 2395</button>
-        <button class="btn btn-default"><i class="fas fa-thumbs-down fa-lg"></i> 11</button>        
-        <br><br>
-        <strong>Comments:</strong><br><br>
-        <input class="form-control" type="text" placeholder="Share your thoughts">
-        <button class="btn btn-primary pull-right">Comment</button>
-        <div>
-            <br><br>
-            <small>
-                <p><b>user001</b></p>
-                this is really helpful!
-            </small>      
-        </div>
+        <form ng-submit="submitStep()">
+            <label>From:</label>
+            <input type="text" class="form-control" ng-model="stepForm.from" required>
+            <label>To:</label>
+            <input type="text" class="form-control" ng-model="stepForm.to" required>
+            <label>Waiting Time:</label>
+            <input type="text" class="form-control" ng-model="stepForm.waitTime" required>
+            <label>Travel Time:</label>
+            <input type="text" class="form-control" ng-model="stepForm.travelTime" required>
+            <label>Mode of Transportation:</label>
+            <select class="form-control" ng-model="stepForm.mode" required>
+                <option value="" selected> -- Select --</option>
+                <option value="fas fa-child">Walk</option>
+                <option value="fas fa-motorcycle">Tricycle</option>
+                <option value="fas fa-taxi">Taxi</option>
+                <option value="fas fa-car">Car</option>
+                <option value="fas fa-bus">Bus</option>
+                <option value="fas fa-train">Train</option>
+                <option value="fas fa-ship">Ship</option>
+                <option value="fas fa-plane">Plane</option>
+            </select>
+            <label>Fare:</label>
+            <input type="text" class="form-control" ng-model="stepForm.fare" required>
+            <label>Description:</label>
+            <textarea class="form-control" ng-model="stepForm.description"></textarea>
+
+            <br>
+            <button type="submit" class="btn btn-primary pull-right">Save</button>
+        </form>
+        <small><i>*Post accurately to get more likes</i></small>
+    </div>
+    <div class="col-md-9">
+        <form class="form-inline" ng-submit="submitPost()">
+            <label>From </label>
+            <input type="text" class="form-control" ng-model="post.title.from" required>
+            <label> to </label>
+            <input type="text" class="form-control" ng-model="post.title.to" required>
+            <label>, </label>
+            <input type="time" class="form-control" ng-model="post.title.startTime" required>
+            <label> to </label>
+            <input type="time" class="form-control" ng-model="post.title.endTime" required>
+            <button type="submit" class="btn btn-primary pull-right">Save Post</button>
+        </form>
+        <hr>
+        <table class="table table-striped">
+            <tbody>
+                <tr ng-repeat="step in post.steps">
+                    <td>Step {{$index + 1}}</td>
+                    <td ng-bind="step.from + ' to ' + step.to"></td>
+                    <td>
+                        <i class="{{step.mode}}"></i>
+                        <text ng-bind="step.fare + ' Php'"></text>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default btn-sm" ng-click="editStep($index)">Edit</button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="deleteStep($index)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
