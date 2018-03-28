@@ -1,51 +1,26 @@
-<h3>From Teresa Park to AWS Makati, 6:10 to 7:40</h3>
+<h3>From {{post.title.from}} to {{post.title.to}}, {{post.title.startTime}} to {{post.title.endTime}}</h3>
 <hr>
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-5">
-        <div>
-            <big><b>Step 1 - </b></big><i class="fas fa-bicycle fa-lg"></i><br><br>
-            <p>From: <b>Teresa Park</b> To: <b>Pilar Tric Terminal</b></p>
-            <p>Waiting Time:  10 minutes</p>
-            <p>Travel Time: 6 minutes</p>
-            <p>Fare: 18 PHP</p>
-            <i>"based from experience, you can get a tric before you reach teresa park gate"</i>
-            <br><br>
-        </div>
-        <div>
-            <big><b>Step 2 - </b></big><i class="fas fa-bicycle fa-child fa-lg"></i><br><br>
-            <p>From: <b>Pilar Tric Terminal</b> To: <b>SM Southmall</b></p>
-            <p>Waiting Time:  0 seconds</p>
-            <p>Travel Time: 2 minutes</p>
-            <p>Fare: 0 PHP</p>
-            <!-- <i>"goodluck on having a comfy seat"</i> -->
-            <br><br>
-        </div>
-        <div>
-            <big><b>Step 3 - </b></big><i class="fas fa-bicycle fa-car fa-lg"></i><br><br>
-            <p>From: <b>SM Southmall</b> To: <b>Makati Med</b></p>
-            <p>Waiting Time:  20 minutes</p>
-            <p>Travel Time: 30 minutes</p>
-            <p>Fare: 70 PHP</p>
-            <i>"goodluck having a comfy seat on the UV"</i>
-            <br><br>
-        </div>
-        <div>
-            <big><b>Step 4 - </b></big><i class="fas fa-bicycle fa-child fa-lg"></i><br><br>
-            <p>From: <b>Makati Med</b> To: <b>AWS Makati</b></p>
-            <p>Waiting Time:  0 seconds</p>
-            <p>Travel Time: 10 minutes</p>
-            <p>Fare: 0 PHP</p>
-            <!-- <i>"goodluck on having a comfy seat"</i> -->
+        <div ng-repeat="step in post.steps">
+            <big><b>Step {{$index + 1}} - </b></big><i class="{{step.mode}} + fa-lg"></i><br><br>
+            <p>From: <b>{{step.from}}</b> to <b>{{step.to}}</b></p>
+            <p>Waiting Time:  {{step.waitTime}}</p>
+            <p>Travel Time: {{step.travelTime}}</p>
+            <p>Fare: {{step.fare}}</p>
+            <i ng-if="step.description">"{{step.description}}"</i>
             <br><br>
         </div>
         <hr>
-        <button class="btn btn-default active"><i class="fas fa-thumbs-up fa-lg"></i> 2395</button>
-        <button class="btn btn-default"><i class="fas fa-thumbs-down fa-lg"></i> 11</button>        
+        <button class="btn btn-default + {{(isLiked) ? 'active': ''}}" ng-disabled="!current_user.isLoggedIn" ng-click="likePost()"><i class="fas fa-thumbs-up fa-lg"></i> {{post.likes.length}}</button>
+        <button class="btn btn-default + {{(isLiked) ? '': 'active'}}" ng-disabled="!current_user.isLoggedIn" ng-click="dislikePost()"><i class="fas fa-thumbs-down fa-lg"></i> {{post.dislikes.length}}</button>        
         <br><br>
         <strong>Comments:</strong><br><br>
-        <input class="form-control" type="text" placeholder="Share your thoughts">
-        <button class="btn btn-primary pull-right">Comment</button>
+        <form ng-submit="comment()" ng-if="current_user.isLoggedIn">
+            <input class="form-control" type="text" placeholder="Share your thoughts">
+            <button class="btn btn-primary pull-right">Comment</button>
+        </form>
         <div>
             <br><br>
             <small>

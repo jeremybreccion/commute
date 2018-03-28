@@ -4,7 +4,7 @@ app.controller('HomeController', function($scope, $http, $rootScope){
             from: $scope.search.from,
             to: $scope.search.to
         }
-        $http.post('/posts/getPosts', searchObject).then(function(res){
+        $http.post('/posts/searchPosts', searchObject).then(function(res){
             $scope.posts = res.data;
         }).catch(function(err){
             $scope.message = err.data.message;
