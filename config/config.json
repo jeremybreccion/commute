@@ -13,6 +13,7 @@
         "/users/register", 
         "/users/logout", 
         "/users/forgotPassword",
-        "/languages/getLanguages"
+        "/languages/getLanguages",
+        "/posts/getPosts"
     ]
 }

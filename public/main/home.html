@@ -12,19 +12,16 @@
             </button>
         </form>
         <hr>
+        <i ng-bind="message"></i>
         <table class="table table-striped">
             <tbody>
-                <tr>
-                    <td><a ui-sref="viewPost({_id: '291038213'})">Teresa Park to AWS Makati</a></td>
-                    <td>6:10 to 7:40</td>
+                <tr ng-repeat="post in posts">
+                    <td><a ui-sref="viewPost({_id: post._id})">{{post.title.from}} to {{post.title.to}}</a></td>
+                    <td>{{post.title.startTime}} to {{post.title.endTime}}</td>
                     <td>
-                        <i class="fas fa-motorcycle"></i>
-                        <i class="fas fa-angle-right"></i>
-                        <i class="fas fa-child"></i>
-                        <i class="fas fa-angle-right"></i>
-                        <i class="fas fa-car"></i>
-                        <i class="fas fa-angle-right"></i>
-                        <i class="fas fa-child"></i>
+                        <div ng-repeat="step in post.steps">
+                            <i class="{{step.mode}}"></i>
+                        </div>
                     </td>
                     <td>
                         <i class="fas fa-thumbs-up"></i> 1k 
