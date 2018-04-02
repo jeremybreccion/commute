@@ -13,8 +13,8 @@
             <br><br>
         </div>
         <hr>
-        <button class="btn btn-default + {{(isLiked) ? 'active': ''}}" ng-disabled="!current_user.isLoggedIn" ng-click="likePost()"><i class="fas fa-thumbs-up fa-lg"></i> {{post.likes.length}}</button>
-        <button class="btn btn-default + {{(isLiked) ? '': 'active'}}" ng-disabled="!current_user.isLoggedIn" ng-click="dislikePost()"><i class="fas fa-thumbs-down fa-lg"></i> {{post.dislikes.length}}</button>        
+        <button class="btn btn-default + {{(isLiked == true) ? 'active' : ''}}" ng-disabled="!current_user.isLoggedIn" ng-click="likePost()"><i class="fas fa-thumbs-up fa-lg"></i> {{post.likes.length}}</button>
+        <button class="btn btn-default + {{(isLiked == false) ? 'active' : ''}}" ng-disabled="!current_user.isLoggedIn" ng-click="dislikePost()"><i class="fas fa-thumbs-down fa-lg"></i> {{post.dislikes.length}}</button>        
         <br><br>
         <strong>Comments:</strong><br><br>
         <form ng-submit="comment()" ng-if="current_user.isLoggedIn">

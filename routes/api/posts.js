@@ -60,18 +60,34 @@ router.post('/viewPost', function(req, res, next){
 
 //for now, no particular messages at response
 router.put('/likePost/:id', function(req, res, next){
-    //check first if the user is inside the dislike array
-    db.posts.findOne({_id: mongo.helper.toObjectID(req.params.id), dislikes: req.session.user.username}, function(err, post){
+    //check first if the user already either likes or dislikes the post
+    db.posts.findOne({_id: mongo.helper.toObjectID(req.params.id), $or: [{dislikes: req.session.user.username}, {likes: req.session.user.username}]}, function(err, post){
         if(err){
+            console.log('db error');
+            console.log(err);
             res.status(400).send();
         }
         //user already dislikes the post
         else if(post){
-            res.status(400).send();
+            console.log(post);
+            if(post.dislikes.indexOf(req.session.user.username) != -1){
+                console.log('disliked');
+                res.status(400).send();
+            }
+            //user already likes the post. so just like fb, remove it from the likes
+            else if(post.likes.indexOf(req.session.user.username) != -1){
+                //remove from likes array
+                console.log('already liked');
+                db.posts.update({_id: mongo.helper.toObjectID(req.params.id)}, {$pull: {likes: req.session.user.username}}, function(err){
+                    //send error nonetheless
+                    res.status(400).send();
+                });
+            }
         }
         else{
+            console.log('neither');
             //addToSet will do nothing if username is already in the likes array
-            db.posts.update({_id: mongo.helper.toObjectID(req.params.id)}, {$addToSet: {likes: req.session.user.username}}, function(err, post){
+            db.posts.update({_id: mongo.helper.toObjectID(req.params.id)}, {$addToSet: {likes: req.session.user.username}}, function(err){
                 if(err){
                     res.status(400).send();
                 }
