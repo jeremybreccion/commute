@@ -81,12 +81,15 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
 app.run(function($rootScope, $state, $http, $window){
     $rootScope.current_user = {}; 
     $rootScope.languages = {};
+    $rootScope.fromState = {
+        name: 'home',
+        params: {}
+    };
 
     //get english & nihongo languages from server and set to rootScope
     $http.get('/languages/getLanguages').then(function(res){
         //console.log('getting languages...');
         $rootScope.languages = res.data.languages;
-        console.log($rootScope.languages);
     });
 
     //run once? OR RUN EVERY STATECHANGE TO DETERMINE IF SERVER RESTARTS?
@@ -112,6 +115,14 @@ app.run(function($rootScope, $state, $http, $window){
         //getting token per page transition solves the expired session from server. 
         //this will stop access and redirect to login page
         //disadvantage: make request to server every page transition
+
+        //experiment: using $rootScope & $state.transitionTo() instead of javascript's back() method
+        //use url instead of name in order to include query parameters
+        if(toState.name == 'login'){
+            $rootScope.fromState.name = (fromState.name != '') ? fromState.name : 'home';
+            $rootScope.fromState.params = fromParams;
+        }
+
         console.log('getting token...');
         $http.get('/session').then(function(res){
             //console.log(res);

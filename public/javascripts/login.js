@@ -18,7 +18,7 @@ app.controller('LoginController', function($scope, $http, $state, $rootScope, Mo
                 console.log('getting languages...');
                 $rootScope.languages = res.data.languages;
                 console.log($rootScope.languages);
-                $state.transitionTo('home');
+                $state.transitionTo($rootScope.fromState.name, $rootScope.fromState.params);
             });
         })
         .catch(function(err){
