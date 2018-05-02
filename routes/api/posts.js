@@ -58,36 +58,33 @@ router.post('/viewPost', function(req, res, next){
     });
 });
 
-//for now, no particular messages at response
-router.put('/likePost/:id', function(req, res, next){
-    //check first if the user already either likes or dislikes the post
-    db.posts.findOne({_id: mongo.helper.toObjectID(req.params.id), $or: [{dislikes: req.session.user.username}, {likes: req.session.user.username}]}, function(err, post){
+router.put('/likePost/:id', function(req, res){
+    var updateOp = {};
+
+    db.posts.findOne({_id: mongo.helper.toObjectID(req.params.id)}, function(err, aPost){
         if(err){
-            console.log('db error');
-            console.log(err);
             res.status(400).send();
         }
-        //user already dislikes the post
-        else if(post){
-            console.log(post);
-            if(post.dislikes.indexOf(req.session.user.username) != -1){
-                console.log('disliked');
-                res.status(400).send();
-            }
-            //user already likes the post. so just like fb, remove it from the likes
-            else if(post.likes.indexOf(req.session.user.username) != -1){
-                //remove from likes array
-                console.log('already liked');
-                db.posts.update({_id: mongo.helper.toObjectID(req.params.id)}, {$pull: {likes: req.session.user.username}}, function(err){
-                    //send error nonetheless
-                    res.status(400).send();
-                });
-            }
-        }
+        //check if the user has already either liked or disliked the post
         else{
-            console.log('neither');
-            //addToSet will do nothing if username is already in the likes array
-            db.posts.update({_id: mongo.helper.toObjectID(req.params.id)}, {$addToSet: {likes: req.session.user.username}}, function(err){
+            if(aPost.likes.indexOf(req.session.user.username) != -1){
+                updateOp = {
+                    $pull: {likes: req.session.user.username}
+                };
+            }
+            else if(aPost.dislikes.indexOf(req.session.user.username) != -1){
+                updateOp = {
+                    $pull: {dislikes: req.session.user.username},
+                    $push: {likes: req.session.user.username}
+                }
+            }
+            else{
+                updateOp = {
+                    $push: {likes: req.session.user.username}
+                };
+            }
+
+            db.posts.update({_id: mongo.helper.toObjectID(req.params.id)}, updateOp, function(err){
                 if(err){
                     res.status(400).send();
                 }
@@ -97,6 +94,45 @@ router.put('/likePost/:id', function(req, res, next){
             });
         }
     });
+});
+
+router.put('/dislikePost/:id', function(req, res){
+    var updateOp = {};
+
+    db.posts.findOne({_id: mongo.helper.toObjectID(req.params.id)}, function(err, aPost){
+        if(err){
+            res.status(400).send();
+        }
+        //check if the user has already either liked or disliked the post
+        else{
+            if(aPost.dislikes.indexOf(req.session.user.username) != -1){
+                updateOp = {
+                    $pull: {dislikes: req.session.user.username}
+                };
+            }
+            else if(aPost.likes.indexOf(req.session.user.username) != -1){
+                updateOp = {
+                    $pull: {likes: req.session.user.username},
+                    $push: {dislikes: req.session.user.username}
+                }
+            }
+            else{
+                updateOp = {
+                    $push: {dislikes: req.session.user.username}
+                };
+            }
+
+            db.posts.update({_id: mongo.helper.toObjectID(req.params.id)}, updateOp, function(err){
+                if(err){
+                    res.status(400).send();
+                }
+                else{
+                    res.status(200).send();
+                }
+            });
+        }
+    });
+
 });
 
 module.exports = router;

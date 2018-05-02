@@ -173,7 +173,7 @@ app.run(function($rootScope, $state, $http, $window){
         var isPageAccessible = true;
         
         //allowed states for 'User' roles only
-        var allowedStates = ["login", "register", "home", "user", "settings"];
+        var allowedStates = ["login", "register", "home", "user", "viewPost", "settings"];
 
         var isStateAllowed = allowedStates.find(function(state){
             return state == stateName;

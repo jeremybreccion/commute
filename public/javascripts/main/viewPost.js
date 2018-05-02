@@ -13,8 +13,12 @@ app.controller('ViewPostController', function($scope, $http, $stateParams, $root
             else if($scope.post.dislikes.indexOf($rootScope.current_user.username) != -1){
                 $scope.isLiked = false;
             }
+            else{
+                $scope.isLiked = null;
+            }
         }).catch(function(err){
             $scope.message = err.data.message;
+            $scope.isLiked = null;
         });
     }
 
@@ -23,15 +27,18 @@ app.controller('ViewPostController', function($scope, $http, $stateParams, $root
     $scope.likePost = function(){
         //no need to pass current user since server already knows from session
         $http.put('/posts/likePost/' + $scope.post._id).then(function(){
-            $scope.isLiked = true;
+            getPost();
         }).catch(function(err){
             $scope.isLiked = null;
-        }).finally(function(){
-            getPost();
         });
     }
 
     $scope.dislikePost = function(){
-
+        //no need to pass current user since server already knows from session
+        $http.put('/posts/dislikePost/' + $scope.post._id).then(function(){
+            getPost();
+        }).catch(function(err){
+            $scope.isLiked = null;
+        });
     }
 });
