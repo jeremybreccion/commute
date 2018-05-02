@@ -1,5 +1,7 @@
-app.controller('ViewPostController', function($scope, $http, $stateParams, $rootScope){
+app.controller('ViewPostController', function($scope, $http, $stateParams, $rootScope, $filter){
     $scope.post = {};
+    $scope.commentForm = '';
+
     //initialize as null (for both neither liked nor disliked)
     $scope.isLiked = null;
     function getPost(){
@@ -24,6 +26,11 @@ app.controller('ViewPostController', function($scope, $http, $stateParams, $root
 
     getPost();
 
+    //
+    $scope.toDate = function(comment){
+        return new Date(comment.date);
+    }
+
     $scope.likePost = function(){
         //no need to pass current user since server already knows from session
         $http.put('/posts/likePost/' + $scope.post._id).then(function(){
@@ -39,6 +46,23 @@ app.controller('ViewPostController', function($scope, $http, $stateParams, $root
             getPost();
         }).catch(function(err){
             $scope.isLiked = null;
+        });
+    }
+
+    $scope.comment = function(){
+        var commentBody = {
+            postID: $scope.post._id,
+            comment: {
+                text: $scope.commentForm,
+                date: $filter('date')(new Date(), 'yyyy-MM-dd HH:mm')
+            }
+        }
+
+        $http.put('/posts/commentPost', commentBody).then(function(){
+            $scope.commentForm = '';
+            getPost();
+        }).catch(function(err){
+
         });
     }
 });

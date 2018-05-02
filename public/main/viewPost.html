@@ -1,4 +1,5 @@
 <h3>From {{post.title.from}} to {{post.title.to}}, {{post.title.startTime}} to {{post.title.endTime}}</h3>
+<i>Posted by: {{post.posted_by}}</i>
 <hr>
 <div class="row">
     <div class="col-md-4"></div>
@@ -17,16 +18,16 @@
         <button class="btn btn-default + {{(isLiked == false) ? 'active' : ''}}" ng-disabled="!current_user.isLoggedIn" ng-click="dislikePost()"><i class="fas fa-thumbs-down fa-lg"></i> {{post.dislikes.length}}</button>        
         <br><br>
         <strong>Comments:</strong><br><br>
-        <form ng-submit="comment()" ng-if="current_user.isLoggedIn">
-            <input class="form-control" type="text" placeholder="Share your thoughts">
-            <button class="btn btn-primary pull-right">Comment</button>
+        <form ng-submit="comment()" ng-show="current_user.isLoggedIn">
+            <textarea class="form-control" placeholder="Share your thoughts" ng-model="commentForm" required></textarea>
+            <button type="submit" class="btn btn-primary pull-right">Comment</button>
         </form>
-        <div>
-            <br><br>
-            <small>
-                <p><b>user001</b></p>
-                this is really helpful!
-            </small>      
+        <br><br>
+        <div ng-repeat="comment in post.comments | orderBy: toDate : true">
+            <br>
+            <p><b ng-bind="comment.commented_by"></b></p>
+            <p ng-bind="comment.text"></p>
+            <small class="pull-right" style="color: gray"><i>{{toDate(comment) | date: 'MMM dd, yyyy h:mm a'}}</i></small>
         </div>
     </div>
 </div>

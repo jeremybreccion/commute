@@ -5,6 +5,8 @@ var mongo = require('mongoskin');
 var db = mongo.db(config.database.name, { native_parser: true });
 db.bind(config.database.collections.posts);
 
+var ObjectID = require('mongodb').ObjectID;
+
 router.post('/add', function(req, res, next){
     var addedPost = req.body;
 
@@ -13,6 +15,8 @@ router.post('/add', function(req, res, next){
     addedPost.dislikes = [];
     //supposedly array of objects
     addedPost.comments = [];
+
+    addedPost.posted_by = req.session.user.username;
 
     db.posts.insert(addedPost, function(err){
         if(err){
@@ -61,18 +65,18 @@ router.post('/viewPost', function(req, res, next){
 router.put('/likePost/:id', function(req, res){
     var updateOp = {};
 
-    db.posts.findOne({_id: mongo.helper.toObjectID(req.params.id)}, function(err, aPost){
+    db.posts.findOne({_id: mongo.helper.toObjectID(req.params.id)}, function(err, post){
         if(err){
             res.status(400).send();
         }
         //check if the user has already either liked or disliked the post
-        else{
-            if(aPost.likes.indexOf(req.session.user.username) != -1){
+        else if(post){
+            if(post.likes.indexOf(req.session.user.username) != -1){
                 updateOp = {
                     $pull: {likes: req.session.user.username}
                 };
             }
-            else if(aPost.dislikes.indexOf(req.session.user.username) != -1){
+            else if(post.dislikes.indexOf(req.session.user.username) != -1){
                 updateOp = {
                     $pull: {dislikes: req.session.user.username},
                     $push: {likes: req.session.user.username}
@@ -93,24 +97,27 @@ router.put('/likePost/:id', function(req, res){
                 }
             });
         }
+        else{
+            res.status(400).send({message: 'Cannot find that particular guide'});
+        }
     });
 });
 
 router.put('/dislikePost/:id', function(req, res){
     var updateOp = {};
 
-    db.posts.findOne({_id: mongo.helper.toObjectID(req.params.id)}, function(err, aPost){
+    db.posts.findOne({_id: mongo.helper.toObjectID(req.params.id)}, function(err, post){
         if(err){
             res.status(400).send();
         }
         //check if the user has already either liked or disliked the post
-        else{
-            if(aPost.dislikes.indexOf(req.session.user.username) != -1){
+        else if(post){
+            if(post.dislikes.indexOf(req.session.user.username) != -1){
                 updateOp = {
                     $pull: {dislikes: req.session.user.username}
                 };
             }
-            else if(aPost.likes.indexOf(req.session.user.username) != -1){
+            else if(post.likes.indexOf(req.session.user.username) != -1){
                 updateOp = {
                     $pull: {likes: req.session.user.username},
                     $push: {dislikes: req.session.user.username}
@@ -131,8 +138,27 @@ router.put('/dislikePost/:id', function(req, res){
                 }
             });
         }
+        else{
+            res.status(400).send({message: 'Cannot find that particular guide'});
+        }
     });
+});
 
+//angular variables are postID, comment.text, & comment.date (yyyy-MM-dd HH:mm format)
+router.put('/commentPost', function(req, res){
+    var commentBody = req.body;
+    commentBody.comment.commented_by = req.session.user.username;
+    //create an ID for uniquely identifying each comment (for future use)
+    commentBody.comment.id = new ObjectID();
+
+    db.posts.update({_id: mongo.helper.toObjectID(req.body.postID)}, {$push: {comments: commentBody.comment}}, function(err){
+        if(err){
+            res.status(400).send();
+        }
+        else{
+            res.status(200).send();
+        }
+    });
 });
 
 module.exports = router;
