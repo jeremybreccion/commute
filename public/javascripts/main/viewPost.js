@@ -5,7 +5,7 @@ app.controller('ViewPostController', function($scope, $http, $stateParams, $root
     //initialize as null (for both neither liked nor disliked)
     $scope.isLiked = null;
     function getPost(){
-        $http.post('/posts/viewPost', {id: $stateParams._id}).then(function(res){
+        $http.post('/posts/view', {id: $stateParams._id}).then(function(res){
             $scope.post = res.data;
     
             //method for setting the active class for like/dislike button
@@ -33,7 +33,7 @@ app.controller('ViewPostController', function($scope, $http, $stateParams, $root
 
     $scope.likePost = function(){
         //no need to pass current user since server already knows from session
-        $http.put('/posts/likePost/' + $scope.post._id).then(function(){
+        $http.put('/posts/like/' + $scope.post._id).then(function(){
             getPost();
         }).catch(function(err){
             $scope.isLiked = null;
@@ -42,7 +42,7 @@ app.controller('ViewPostController', function($scope, $http, $stateParams, $root
 
     $scope.dislikePost = function(){
         //no need to pass current user since server already knows from session
-        $http.put('/posts/dislikePost/' + $scope.post._id).then(function(){
+        $http.put('/posts/dislike/' + $scope.post._id).then(function(){
             getPost();
         }).catch(function(err){
             $scope.isLiked = null;

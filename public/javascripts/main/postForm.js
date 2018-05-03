@@ -10,7 +10,7 @@ app.controller('PostFormController', function($scope, $http, $stateParams, $filt
     };
 
     function getPost(){
-        $http.post('/posts/viewPost', {id: $stateParams._id}).then(function(res){
+        $http.post('/posts/view', {id: $stateParams._id}).then(function(res){
             $scope.post = res.data;
 
             /* //set time format (NOT WORKING)

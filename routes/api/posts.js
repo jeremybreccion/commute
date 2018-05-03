@@ -32,7 +32,7 @@ router.post('/add', function(req, res, next){
 //POST method is use to get posts because req.body must be used
 //req.body must be used because express.jwt.unless does not exempt url routes with params
 //need to exempt route so user is not required to login when searching
-router.post('/searchPosts', function(req, res, next){
+router.post('/search', function(req, res, next){
     //{ title: {from: req.params.from, to: req.params.to}} does not work
     //use regex for wildcard searches
     
@@ -49,7 +49,7 @@ router.post('/searchPosts', function(req, res, next){
     });
 });
 
-router.post('/viewPost', function(req, res, next){
+router.post('/view', function(req, res, next){
     db.posts.findOne({_id: mongo.helper.toObjectID(req.body.id)}, function(err, post){
         if(err){
             res.status(400).send({message: 'Error in searching'});
@@ -63,7 +63,7 @@ router.post('/viewPost', function(req, res, next){
     });
 });
 
-router.put('/likePost/:id', function(req, res){
+router.put('/like/:id', function(req, res){
     var updateOp = {};
 
     db.posts.findOne({_id: mongo.helper.toObjectID(req.params.id)}, function(err, post){
@@ -107,7 +107,7 @@ router.put('/likePost/:id', function(req, res){
     });
 });
 
-router.put('/dislikePost/:id', function(req, res){
+router.put('/dislike/:id', function(req, res){
     var updateOp = {};
 
     db.posts.findOne({_id: mongo.helper.toObjectID(req.params.id)}, function(err, post){
@@ -185,7 +185,7 @@ router.put('/deleteComment/:id', function(req, res){
     });
 });
 
-router.get('/getOwnPosts', function(req, res){
+router.get('/posted', function(req, res){
     db.posts.find({posted_by: req.session.user.username}).toArray(function(err, posts){
         if(err){
             res.status(400).send();
