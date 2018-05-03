@@ -64,4 +64,8 @@ app.controller('PostController', function($scope, $http, $filter){
             }
         }
     }
+
+    $scope.resetStepForm = function(){
+        $scope.stepForm = {};
+    }
 });
