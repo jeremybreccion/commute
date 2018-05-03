@@ -30,11 +30,11 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
         templateUrl: 'main/settings.html',
         controller: 'SettingsController'
     })
-    .state('user', {
+    .state('posts', {
         parent: 'main',
-        url: '/user',
-        templateUrl: 'main/user.html',
-        //controller: 'UserController'
+        url: '/posts',
+        templateUrl: 'main/posts.html',
+        controller: 'PostsController'
     })
     .state('admin', {
         parent: 'main',
@@ -51,8 +51,8 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
     .state('post', {
         parent: 'main',
         url: '/post/:_id',
-        templateUrl: 'main/post.html',
-        controller: 'PostController'
+        templateUrl: 'main/postForm.html',
+        controller: 'PostFormController'
     });
 
     //catch response errors from server resulted from no authorization token found? or token expired
@@ -149,7 +149,7 @@ app.run(function($rootScope, $state, $http, $window){
         });
 
         //need this if user tries to access a page without completely logging in (i.e. type the link)
-        if($rootScope.token == undefined && (toState.name == "post" || toState.name == "user")){
+        if($rootScope.token == undefined && (toState.name == "post" || toState.name == "posts")){
             alert('You must log in first');
             //event.preventDefault();
             $state.transitionTo('home');
@@ -173,7 +173,7 @@ app.run(function($rootScope, $state, $http, $window){
         var isPageAccessible = true;
         
         //allowed states for 'User' roles only
-        var allowedStates = ["login", "register", "home", "user", "post", "viewPost", "settings"];
+        var allowedStates = ["login", "register", "home", "posts", "post", "viewPost", "settings"];
 
         var isStateAllowed = allowedStates.find(function(state){
             return state == stateName;

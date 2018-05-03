@@ -185,4 +185,15 @@ router.put('/deleteComment/:id', function(req, res){
     });
 });
 
+router.get('/getOwnPosts', function(req, res){
+    db.posts.find({posted_by: req.session.user.username}).toArray(function(err, posts){
+        if(err){
+            res.status(400).send();
+        }
+        else{
+            res.status(200).send(posts);
+        }
+    });
+});
+
 module.exports = router;

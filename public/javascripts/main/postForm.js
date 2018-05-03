@@ -1,4 +1,4 @@
-app.controller('PostController', function($scope, $http, $filter){
+app.controller('PostFormController', function($scope, $http, $stateParams, $filter){
     $scope.message = '';
     $scope.post = {
         title: {},
@@ -8,6 +8,22 @@ app.controller('PostController', function($scope, $http, $filter){
         title: {},
         steps: []
     };
+
+    function getPost(){
+        $http.post('/posts/viewPost', {id: $stateParams._id}).then(function(res){
+            $scope.post = res.data;
+
+            /* //set time format (NOT WORKING)
+            $scope.post.title.startTime = new Date($scope.post.title.startTime);
+            $scope.post.title.endTime = new Date($scope.post.title.endTime); */
+        }).catch(function(err){
+
+        });
+    }
+
+    if($stateParams._id != ''){
+        getPost();
+    }
 
     //convert timeString for the input fields
 
