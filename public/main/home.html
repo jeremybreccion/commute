@@ -15,18 +15,18 @@
         <i ng-bind="message"></i>
         <table class="table table-striped">
             <tbody>
-                <tr ng-repeat="post in posts">
-                    <td><a ui-sref="viewPost({_id: post._id})">{{post.title.from}} to {{post.title.to}}</a></td>
-                    <td>{{post.title.startTime}} to {{post.title.endTime}}</td>
+                <tr ng-repeat="guide in guides">
+                    <td><a ui-sref="viewGuide({_id: guide._id})">{{guide.title.from}} to {{guide.title.to}}</a></td>
+                    <td>{{guide.title.startTime}} to {{guide.title.endTime}}</td>
                     <td>
-                        <div ng-repeat="step in post.steps" style="display: inline">
+                        <div ng-repeat="step in guide.steps" style="display: inline">
                             <i class="{{step.mode}}"></i>
                         </div>
                     </td>
                     <td>
-                        <i class="fas fa-thumbs-up"></i> {{post.likes.length}} 
+                        <i class="fas fa-thumbs-up"></i> {{guide.likes.length}} 
                         &nbsp;
-                        <i class="fas fa-thumbs-down"></i> {{post.dislikes.length}} 
+                        <i class="fas fa-thumbs-down"></i> {{guide.dislikes.length}} 
                     </td>
                 </tr>
             </tbody>
@@ -35,7 +35,7 @@
     <div class="col-md-1"></div>
     <div class="col-md-3">
         <div class="row">
-            Want to post a guide? Click <a ui-sref="post">here</a>
+            Want to post a guide? Click <a ui-sref="guide">here</a>
         </div>
         <hr>
         <div class="row" style="display: block; height: 200px;">

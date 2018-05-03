@@ -1,18 +1,18 @@
-app.controller('ViewPostController', function($scope, $http, $stateParams, $rootScope, $filter){
-    $scope.post = {};
+app.controller('ViewGuideController', function($scope, $http, $stateParams, $rootScope, $filter){
+    $scope.guide = {};
     $scope.commentForm = '';
 
     //initialize as null (for both neither liked nor disliked)
     $scope.isLiked = null;
-    function getPost(){
-        $http.post('/posts/view', {id: $stateParams._id}).then(function(res){
-            $scope.post = res.data;
+    function getGuide(){
+        $http.post('/guides/view', {id: $stateParams._id}).then(function(res){
+            $scope.guide = res.data;
     
             //method for setting the active class for like/dislike button
-            if($scope.post.likes.indexOf($rootScope.current_user.username) != -1){
+            if($scope.guide.likes.indexOf($rootScope.current_user.username) != -1){
                 $scope.isLiked = true;
             }
-            else if($scope.post.dislikes.indexOf($rootScope.current_user.username) != -1){
+            else if($scope.guide.dislikes.indexOf($rootScope.current_user.username) != -1){
                 $scope.isLiked = false;
             }
             else{
@@ -24,26 +24,26 @@ app.controller('ViewPostController', function($scope, $http, $stateParams, $root
         });
     }
 
-    getPost();
+    getGuide();
 
     //converts date string for sorting comments
     $scope.toDate = function(date){
         return new Date(date);
     }
 
-    $scope.likePost = function(){
+    $scope.likeGuide = function(){
         //no need to pass current user since server already knows from session
-        $http.put('/posts/like/' + $scope.post._id).then(function(){
-            getPost();
+        $http.put('/guides/like/' + $scope.guide._id).then(function(){
+            getGuide();
         }).catch(function(err){
             $scope.isLiked = null;
         });
     }
 
-    $scope.dislikePost = function(){
+    $scope.dislikeGuide = function(){
         //no need to pass current user since server already knows from session
-        $http.put('/posts/dislike/' + $scope.post._id).then(function(){
-            getPost();
+        $http.put('/guides/dislike/' + $scope.guide._id).then(function(){
+            getGuide();
         }).catch(function(err){
             $scope.isLiked = null;
         });
@@ -51,24 +51,24 @@ app.controller('ViewPostController', function($scope, $http, $stateParams, $root
 
     $scope.comment = function(){
         var commentBody = {
-            postID: $scope.post._id,
+            guideID: $scope.guide._id,
             comment: {
                 text: $scope.commentForm,
                 date: $filter('date')(new Date(), 'yyyy-MM-dd HH:mm')
             }
         }
 
-        $http.put('/posts/comment', commentBody).then(function(){
+        $http.put('/guides/comment', commentBody).then(function(){
             $scope.commentForm = '';
-            getPost();
+            getGuide();
         }).catch(function(err){
 
         });
     }
 
     $scope.deleteComment = function(id){
-        $http.put('/posts/deleteComment/' + id).then(function(){
-            getPost();
+        $http.put('/guides/deleteComment/' + id).then(function(){
+            getGuide();
         }).catch(function(err){
 
         });

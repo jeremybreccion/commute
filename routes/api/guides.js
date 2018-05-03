@@ -180,18 +180,20 @@ router.put('/dislike/:id', function(req, res){
     });
 });
 
-//angular variables are postID, comment.text, & comment.date (yyyy-MM-dd HH:mm format)
+//angular variables are guideID, comment.text, & comment.date (yyyy-MM-dd HH:mm format)
 router.put('/comment', function(req, res){
     var commentBody = req.body;
     commentBody.comment.commented_by = req.session.user.username;
     //create an ID for uniquely identifying each comment (for future use)
     commentBody.comment.id = new ObjectID();
 
-    db.posts.update({_id: mongo.helper.toObjectID(req.body.postID)}, {$push: {comments: commentBody.comment}}, function(err, writeResult){
+    db.posts.update({_id: mongo.helper.toObjectID(req.body.guideID)}, {$push: {comments: commentBody.comment}}, function(err, writeResult){
         if(err){
+            console.log(err);
             res.status(400).send();
         }
         else if(writeResult.result.nModified == 0){
+            console.log('oireoir')
             res.status(400).send();
         }
         else{

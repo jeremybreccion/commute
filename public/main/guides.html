@@ -1,0 +1,39 @@
+<a ui-sref="guide">
+    <button class="btn btn-primary">New Guide</button>
+</a>
+&nbsp; &nbsp; 
+<i style="color:red">{{message}}</i>
+<hr>
+<table class="table">
+    <thead>
+        <th>Title</th>
+        <th>Time</th>
+        <th>Steps</th>
+        <th>Likes/Dislikes</th>
+        <th>Comments</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr ng-repeat="guide in guides">
+            <td><a ui-sref="viewGuide({_id: guide._id})">{{guide.title.from}} to {{guide.title.to}}</a></td>
+            <td>{{guide.title.startTime}} to {{guide.title.endTime}}</td>
+            <td>
+                <div ng-repeat="step in guide.steps" style="display: inline">
+                    <i class="{{step.mode}}"></i>
+                </div>
+            </td>
+            <td>
+                <i class="fas fa-thumbs-up"></i> {{guide.likes.length}} 
+                &nbsp;
+                <i class="fas fa-thumbs-down"></i> {{guide.dislikes.length}} 
+            </td>
+            <td>{{guide.comments.length}}</td>
+            <td>
+                <a ui-sref="guide({_id: guide._id})">
+                    <button type="button" class="btn btn-default">Edit</button>
+                </a>
+                <button type="button" class="btn btn-danger" ng-click="deleteGuide(guide._id)">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

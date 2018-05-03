@@ -1,10 +1,10 @@
-<h3>From {{post.title.from}} to {{post.title.to}}, {{post.title.startTime}} to {{post.title.endTime}}</h3>
-<i>Posted by: {{post.posted_by}}</i>
+<h3>From {{guide.title.from}} to {{guide.title.to}}, {{guide.title.startTime}} to {{guide.title.endTime}}</h3>
+<i>Posted by: {{guide.posted_by}}</i>
 <hr>
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-5">
-        <div ng-repeat="step in post.steps">
+        <div ng-repeat="step in guide.steps">
             <big><b>Step {{$index + 1}} - </b></big><i class="{{step.mode}} + fa-lg"></i><br><br>
             <p>From: <b>{{step.from}}</b> to <b>{{step.to}}</b></p>
             <p>Waiting Time:  {{step.waitTime}}</p>
@@ -14,8 +14,8 @@
             <br><br>
         </div>
         <hr>
-        <button class="btn btn-default + {{(isLiked == true) ? 'active' : ''}}" ng-disabled="!current_user.isLoggedIn" ng-click="likePost()"><i class="fas fa-thumbs-up fa-lg"></i> {{post.likes.length}}</button>
-        <button class="btn btn-default + {{(isLiked == false) ? 'active' : ''}}" ng-disabled="!current_user.isLoggedIn" ng-click="dislikePost()"><i class="fas fa-thumbs-down fa-lg"></i> {{post.dislikes.length}}</button>        
+        <button class="btn btn-default + {{(isLiked == true) ? 'active' : ''}}" ng-disabled="!current_user.isLoggedIn" ng-click="likeGuide()"><i class="fas fa-thumbs-up fa-lg"></i> {{guide.likes.length}}</button>
+        <button class="btn btn-default + {{(isLiked == false) ? 'active' : ''}}" ng-disabled="!current_user.isLoggedIn" ng-click="dislikeGuide()"><i class="fas fa-thumbs-down fa-lg"></i> {{guide.dislikes.length}}</button>        
         <br><br>
         <strong>Comments:</strong><br><br>
         <form ng-submit="comment()" ng-show="current_user.isLoggedIn">
@@ -23,7 +23,7 @@
             <button type="submit" class="btn btn-primary pull-right">Comment</button>
         </form>
         <br><br>
-        <div ng-repeat="comment in post.comments | orderBy: toDate(comment.date) : true">
+        <div ng-repeat="comment in guide.comments | orderBy: toDate(comment.date) : true">
             <br>
             <p>
                 <b ng-bind="comment.commented_by"></b>

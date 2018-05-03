@@ -1,29 +1,29 @@
-app.controller('PostFormController', function($scope, $http, $stateParams, $filter){
+app.controller('GuideFormController', function($scope, $http, $stateParams, $filter){
     $scope.message = '';
     $scope.stepForm = {};
-    $scope.post = {
+    $scope.guide = {
         title: {},
         steps: []
     };
-    var post = {
+    var guide = {
         title: {},
         steps: []
     };
 
-    function getPost(){
-        $http.post('/posts/view', {id: $stateParams._id}).then(function(res){
-            $scope.post = res.data;
+    function getGuide(){
+        $http.post('/guides/view', {id: $stateParams._id}).then(function(res){
+            $scope.guide = res.data;
 
             /* //set time format (NOT WORKING)
-            $scope.post.title.startTime = new Date($scope.post.title.startTime);
-            $scope.post.title.endTime = new Date($scope.post.title.endTime); */
+            $scope.guide.title.startTime = new Date($scope.guide.title.startTime);
+            $scope.guide.title.endTime = new Date($scope.guide.title.endTime); */
         }).catch(function(err){
 
         });
     }
 
     if($stateParams._id != ''){
-        getPost();
+        getGuide();
     }
 
     //convert timeString for the input fields
@@ -31,10 +31,10 @@ app.controller('PostFormController', function($scope, $http, $stateParams, $filt
     $scope.submitStep = function(){
         console.log($scope.stepForm);
         if($scope.stepForm.index == undefined){
-            $scope.post.steps.push($scope.stepForm);
+            $scope.guide.steps.push($scope.stepForm);
         }
         else{
-            angular.copy($scope.stepForm, $scope.post.steps[$scope.stepForm.index]);
+            angular.copy($scope.stepForm, $scope.guide.steps[$scope.stepForm.index]);
         }
 
         $scope.stepForm = {};
@@ -42,30 +42,30 @@ app.controller('PostFormController', function($scope, $http, $stateParams, $filt
     }
 
     $scope.editStep = function(index){
-        angular.copy($scope.post.steps[index], $scope.stepForm);
+        angular.copy($scope.guide.steps[index], $scope.stepForm);
         $scope.stepForm.index = index;
     }
 
     $scope.deleteStep = function(index){
-        $scope.post.steps.splice(index, 1);
+        $scope.guide.steps.splice(index, 1);
     }
 
-    $scope.submitPost = function(){
+    $scope.submitGuide = function(){
         //use Object.assign to avoid referencing 
-        post = angular.copy($scope.post);
+        guide = angular.copy($scope.guide);
 
-        if(post.steps.length == 0){
+        if(guide.steps.length == 0){
             alert('add at least 1 step');
         }
         else{
             //convert the time to HH:mm when submitting
             
-            post.title.startTime = $filter('date')(new Date(post.title.startTime), 'HH:mm');
-            post.title.endTime = $filter('date')(new Date(post.title.endTime), 'HH:mm');
+            guide.title.startTime = $filter('date')(new Date(guide.title.startTime), 'HH:mm');
+            guide.title.endTime = $filter('date')(new Date(guide.title.endTime), 'HH:mm');
 
-             //add (post)
-            if(post._id == undefined){
-                $http.post('/posts/add', post).then(function(res){
+             //add (guide)
+            if(guide._id == undefined){
+                $http.post('/guides/add', guide).then(function(res){
                     $scope.message = res.data.message;
                 }).catch(function(err){
                     $scope.message = err.data.message;
@@ -73,7 +73,7 @@ app.controller('PostFormController', function($scope, $http, $stateParams, $filt
             }
             //update (put)
             else{ 
-                $http.put('/posts/update', post).then(function(res){
+                $http.put('/guides/update', guide).then(function(res){
                     $scope.message = res.data.message;
                 }).catch(function(err){
                     $scope.message = err.data.message;

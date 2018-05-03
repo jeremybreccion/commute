@@ -30,11 +30,11 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
         templateUrl: 'main/settings.html',
         controller: 'SettingsController'
     })
-    .state('posts', {
+    .state('guides', {
         parent: 'main',
-        url: '/posts',
-        templateUrl: 'main/posts.html',
-        controller: 'PostsController'
+        url: '/guides',
+        templateUrl: 'main/guides.html',
+        controller: 'GuidesController'
     })
     .state('admin', {
         parent: 'main',
@@ -42,17 +42,17 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider){
         templateUrl: 'main/admin.html',
         //controller: 'AdminController'
     })
-    .state('viewPost', {
+    .state('viewGuide', {
         parent: 'main',
-        url: '/viewPost/:_id',
-        templateUrl: 'main/viewPost.html',
-        controller: 'ViewPostController'
+        url: '/viewGuide/:_id',
+        templateUrl: 'main/viewGuide.html',
+        controller: 'ViewGuideController'
     })
-    .state('post', {
+    .state('guide', {
         parent: 'main',
-        url: '/post/:_id',
-        templateUrl: 'main/postForm.html',
-        controller: 'PostFormController'
+        url: '/guide/:_id',
+        templateUrl: 'main/guideForm.html',
+        controller: 'GuideFormController'
     });
 
     //catch response errors from server resulted from no authorization token found? or token expired
@@ -149,7 +149,7 @@ app.run(function($rootScope, $state, $http, $window){
         });
 
         //need this if user tries to access a page without completely logging in (i.e. type the link)
-        if($rootScope.token == undefined && (toState.name == "post" || toState.name == "posts")){
+        if($rootScope.token == undefined && (toState.name == "guide" || toState.name == "guides")){
             alert('You must log in first');
             //event.preventDefault();
             $state.transitionTo('home');
@@ -173,7 +173,7 @@ app.run(function($rootScope, $state, $http, $window){
         var isPageAccessible = true;
         
         //allowed states for 'User' roles only
-        var allowedStates = ["login", "register", "home", "posts", "post", "viewPost", "settings"];
+        var allowedStates = ["login", "register", "home", "guides", "guide", "viewGuide", "settings"];
 
         var isStateAllowed = allowedStates.find(function(state){
             return state == stateName;

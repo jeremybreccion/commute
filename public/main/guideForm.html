@@ -35,21 +35,21 @@
         <small><i>*Post accurately to get more likes</i></small>
     </div>
     <div class="col-md-9">
-        <form class="form-inline" ng-submit="submitPost()">
+        <form class="form-inline" ng-submit="submitGuide()">
             <label>From </label>
-            <input type="text" class="form-control" ng-model="post.title.from" required>
+            <input type="text" class="form-control" ng-model="guide.title.from" required>
             <label> to </label>
-            <input type="text" class="form-control" ng-model="post.title.to" required>
+            <input type="text" class="form-control" ng-model="guide.title.to" required>
             <label>, </label>
-            <input type="time" class="form-control" ng-model="post.title.startTime" required>
+            <input type="time" class="form-control" ng-model="guide.title.startTime" required>
             <label> to </label>
-            <input type="time" class="form-control" ng-model="post.title.endTime" required>
-            <button type="submit" class="btn btn-primary pull-right">Save Post</button>
+            <input type="time" class="form-control" ng-model="guide.title.endTime" required>
+            <button type="submit" class="btn btn-primary pull-right">Save Guide</button>
         </form>
         <hr>
         <table class="table table-striped">
             <tbody>
-                <tr ng-repeat="step in post.steps">
+                <tr ng-repeat="step in guide.steps">
                     <td>Step {{$index + 1}}</td>
                     <td ng-bind="step.from + ' to ' + step.to"></td>
                     <td>

@@ -14,7 +14,7 @@
         "/users/logout", 
         "/users/forgotPassword",
         "/languages/getLanguages",
-        "/posts/search",
-        "/posts/view"
+        "/guides/search",
+        "/guides/view"
     ]
 }
