@@ -34,7 +34,9 @@ router.post('/add', function(req, res, next){
 //need to exempt route so user is not required to login when searching
 router.post('/searchPosts', function(req, res, next){
     //{ title: {from: req.params.from, to: req.params.to}} does not work
-    db.posts.find({'title.from': req.body.from, 'title.to': req.body.to}).toArray(function(err, posts){
+    //use regex for wildcard searches
+    
+    db.posts.find({'title.from': {$regex: new RegExp(req.body.from, "i")}, 'title.to': {$regex: new RegExp(req.body.to, "i")}}).toArray(function(err, posts){
         if(err){
             res.status(400).send({message: 'Error in searching'});
         }
