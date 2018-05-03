@@ -26,9 +26,9 @@ app.controller('ViewPostController', function($scope, $http, $stateParams, $root
 
     getPost();
 
-    //
-    $scope.toDate = function(comment){
-        return new Date(comment.date);
+    //converts date string for sorting comments
+    $scope.toDate = function(date){
+        return new Date(date);
     }
 
     $scope.likePost = function(){
@@ -58,8 +58,16 @@ app.controller('ViewPostController', function($scope, $http, $stateParams, $root
             }
         }
 
-        $http.put('/posts/commentPost', commentBody).then(function(){
+        $http.put('/posts/comment', commentBody).then(function(){
             $scope.commentForm = '';
+            getPost();
+        }).catch(function(err){
+
+        });
+    }
+
+    $scope.deleteComment = function(id){
+        $http.put('/posts/deleteComment/' + id).then(function(){
             getPost();
         }).catch(function(err){
 

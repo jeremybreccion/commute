@@ -34,7 +34,6 @@ router.post('/add', function(req, res, next){
 //need to exempt route so user is not required to login when searching
 router.post('/searchPosts', function(req, res, next){
     //{ title: {from: req.params.from, to: req.params.to}} does not work
-    console.log(req.body);
     db.posts.find({'title.from': req.body.from, 'title.to': req.body.to}).toArray(function(err, posts){
         if(err){
             res.status(400).send({message: 'Error in searching'});
@@ -88,8 +87,11 @@ router.put('/likePost/:id', function(req, res){
                 };
             }
 
-            db.posts.update({_id: mongo.helper.toObjectID(req.params.id)}, updateOp, function(err){
+            db.posts.update({_id: mongo.helper.toObjectID(req.params.id)}, updateOp, function(err, writeResult){
                 if(err){
+                    res.status(400).send();
+                }
+                else if(writeResult.result.nModified == 0){
                     res.status(400).send();
                 }
                 else{
@@ -129,8 +131,11 @@ router.put('/dislikePost/:id', function(req, res){
                 };
             }
 
-            db.posts.update({_id: mongo.helper.toObjectID(req.params.id)}, updateOp, function(err){
+            db.posts.update({_id: mongo.helper.toObjectID(req.params.id)}, updateOp, function(err, writeResult){
                 if(err){
+                    res.status(400).send();
+                }
+                else if(writeResult.result.nModified == 0){
                     res.status(400).send();
                 }
                 else{
@@ -145,14 +150,31 @@ router.put('/dislikePost/:id', function(req, res){
 });
 
 //angular variables are postID, comment.text, & comment.date (yyyy-MM-dd HH:mm format)
-router.put('/commentPost', function(req, res){
+router.put('/comment', function(req, res){
     var commentBody = req.body;
     commentBody.comment.commented_by = req.session.user.username;
     //create an ID for uniquely identifying each comment (for future use)
     commentBody.comment.id = new ObjectID();
 
-    db.posts.update({_id: mongo.helper.toObjectID(req.body.postID)}, {$push: {comments: commentBody.comment}}, function(err){
+    db.posts.update({_id: mongo.helper.toObjectID(req.body.postID)}, {$push: {comments: commentBody.comment}}, function(err, writeResult){
         if(err){
+            res.status(400).send();
+        }
+        else if(writeResult.result.nModified == 0){
+            res.status(400).send();
+        }
+        else{
+            res.status(200).send();
+        }
+    });
+});
+
+router.put('/deleteComment/:id', function(req, res){
+    db.posts.update({comments: {$elemMatch: {id: mongo.helper.toObjectID(req.params.id)}}}, {$pull: {comments: {id: mongo.helper.toObjectID(req.params.id)}}}, function(err, writeResult){
+        if(err){
+            res.status(400).send();
+        }
+        else if(writeResult.result.nModified == 0){
             res.status(400).send();
         }
         else{

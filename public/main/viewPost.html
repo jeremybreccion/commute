@@ -23,11 +23,17 @@
             <button type="submit" class="btn btn-primary pull-right">Comment</button>
         </form>
         <br><br>
-        <div ng-repeat="comment in post.comments | orderBy: toDate : true">
+        <div ng-repeat="comment in post.comments | orderBy: toDate(comment.date) : true">
             <br>
-            <p><b ng-bind="comment.commented_by"></b></p>
+            <p>
+                <b ng-bind="comment.commented_by"></b>
+                <button class="btn btn-default btn-xs pull-right" ng-if="comment.commented_by == current_user.username" ng-click="deleteComment(comment.id)">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </p>
             <p ng-bind="comment.text"></p>
-            <small class="pull-right" style="color: gray"><i>{{toDate(comment) | date: 'MMM dd, yyyy h:mm a'}}</i></small>
+            <small class="pull-right" style="color: gray"><i>{{toDate(comment.date) | date: 'MMM dd, yyyy h:mm a'}}</i></small>
+            <br>
         </div>
     </div>
 </div>
