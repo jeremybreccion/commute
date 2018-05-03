@@ -1,5 +1,6 @@
 app.controller('PostFormController', function($scope, $http, $stateParams, $filter){
     $scope.message = '';
+    $scope.stepForm = {};
     $scope.post = {
         title: {},
         steps: []
@@ -72,7 +73,7 @@ app.controller('PostFormController', function($scope, $http, $stateParams, $filt
             }
             //update (put)
             else{ 
-                $http.put('/posts/update/' + post._id, post).then(function(res){
+                $http.put('/posts/update', post).then(function(res){
                     $scope.message = res.data.message;
                 }).catch(function(err){
                     $scope.message = err.data.message;

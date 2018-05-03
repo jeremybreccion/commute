@@ -14,7 +14,7 @@
         "/users/logout", 
         "/users/forgotPassword",
         "/languages/getLanguages",
-        "/posts/searchPosts",
-        "/posts/viewPost"
+        "/posts/search",
+        "/posts/view"
     ]
 }

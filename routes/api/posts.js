@@ -49,6 +49,7 @@ router.post('/search', function(req, res, next){
     });
 });
 
+//for everyone's use
 router.post('/view', function(req, res, next){
     db.posts.findOne({_id: mongo.helper.toObjectID(req.body.id)}, function(err, post){
         if(err){
@@ -59,6 +60,34 @@ router.post('/view', function(req, res, next){
         }
         else{
             res.status(400).send({message: 'Cannot find that particular guide'});
+        }
+    });
+});
+
+router.put('/update', function(req, res){
+    db.posts.update({_id: mongo.helper.toObjectID(req.body._id)}, {$set: {title: req.body.title, steps: req.body.steps}}, function(err, writeResult){
+        if(err){
+            res.status(400).send();
+        }
+        else if(writeResult.result.nModified == 0){
+            res.status(400).send();
+        }
+        else{
+            res.status(200).send({message: 'Post successfully updated'});
+        }
+    });
+});
+
+router.delete('/delete/:id', function(req, res){
+    db.posts.remove({_id: mongo.helper.toObjectID(req.params.id)}, function(err, writeResult){
+        if(err){
+            res.status(400).send();
+        }
+        else if(writeResult.result.n == 0){
+            res.status(400).send();
+        }
+        else{
+            res.status(200).send({message: 'Post successfully deleted'});
         }
     });
 });
